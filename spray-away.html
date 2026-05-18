@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spray Away — Bin Cleaning</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #F7F4EF;
+    --green: #2D6A4F;
+    --green-light: #D8EED9;
+    --green-mid: #52B788;
+    --ink: #1A1A18;
+    --muted: #6B6B5F;
+    --white: #FFFFFF;
+    --accent: #E76F51;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.1rem 2.5rem;
+    background: var(--cream);
+    border-bottom: 1px solid rgba(0,0,0,0.07);
+  }
+
+  .nav-logo {
+    font-family: 'Fraunces', serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--green);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--green); }
+
+  .nav-cta {
+    background: var(--green);
+    color: var(--white) !important;
+    padding: 0.5rem 1.2rem;
+    border-radius: 100px;
+    transition: background 0.2s !important;
+  }
+
+  .nav-cta:hover { background: #1f4f3a !important; color: var(--white) !important; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 8rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--green-light);
+    opacity: 0.5;
+    z-index: 0;
+  }
+
+  .hero-bg-circle.a { width: 500px; height: 500px; top: -100px; right: -150px; }
+  .hero-bg-circle.b { width: 300px; height: 300px; bottom: 0px; left: -80px; }
+
+  .hero-tag {
+    display: inline-block;
+    background: var(--green-light);
+    color: var(--green);
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--ink);
+    position: relative;
+    z-index: 1;
+    animation: fadeUp 0.7s ease both;
+    max-width: 700px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--green);
+  }
+
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--muted);
+    margin-top: 1.25rem;
+    max-width: 480px;
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    animation: fadeUp 0.9s ease both;
+  }
+
+  .btn-primary {
+    background: var(--green);
+    color: var(--white);
+    padding: 0.85rem 2rem;
+    border-radius: 100px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+  }
+
+  .btn-primary:hover { background: #1f4f3a; transform: translateY(-2px); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--ink);
+    padding: 0.85rem 2rem;
+    border-radius: 100px;
+    border: 1.5px solid rgba(0,0,0,0.15);
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+
+  .btn-secondary:hover { border-color: var(--green); color: var(--green); transform: translateY(-2px); }
+
+  .hero-scroll {
+    margin-top: 4rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    z-index: 1;
+    animation: fadeUp 1s ease both;
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: var(--muted);
+    opacity: 0.4;
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  /* SECTIONS */
+  section { padding: 5rem 2rem; }
+
+  .container { max-width: 900px; margin: 0 auto; }
+
+  .section-tag {
+    display: inline-block;
+    background: var(--green-light);
+    color: var(--green);
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.3rem 0.85rem;
+    border-radius: 100px;
+    margin-bottom: 1rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+
+  .section-sub {
+    font-size: 1rem;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 520px;
+  }
+
+  /* HOW IT WORKS */
+  .how { background: var(--white); }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .step-num {
+    width: 42px;
+    height: 42px;
+    background: var(--green-light);
+    color: var(--green);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .step h3 {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .step p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* PRICING */
+  .pricing-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .pricing-card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1.5px solid rgba(0,0,0,0.07);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .pricing-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.07); }
+
+  .pricing-card.featured {
+    background: var(--green);
+    border-color: var(--green);
+  }
+
+  .pricing-card.featured .price-label,
+  .pricing-card.featured .price-amt,
+  .pricing-card.featured .price-desc,
+  .pricing-card.featured .price-includes li { color: var(--white); }
+
+  .pricing-card.featured .price-includes li::before { background: rgba(255,255,255,0.6); }
+
+  .price-label { font-size: 0.8rem; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; }
+  .price-amt { font-family: 'Fraunces', serif; font-size: 3rem; font-weight: 600; color: var(--ink); line-height: 1; }
+  .price-desc { font-size: 0.85rem; color: var(--muted); margin-top: 0.4rem; margin-bottom: 1.25rem; }
+
+  .price-includes { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+  .price-includes li { font-size: 0.88rem; color: var(--muted); display: flex; align-items: center; gap: 0.5rem; }
+  .price-includes li::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green-mid); flex-shrink: 0; }
+
+  .referral-box {
+    margin-top: 2rem;
+    background: var(--green-light);
+    border-radius: 16px;
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .referral-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+  }
+
+  .referral-box h3 { font-size: 1rem; font-weight: 500; color: var(--green); margin-bottom: 0.25rem; }
+  .referral-box p { font-size: 0.875rem; color: var(--muted); line-height: 1.5; }
+
+  /* ABOUT */
+  .about { background: var(--white); }
+
+  .about-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .about-visual {
+    background: var(--green-light);
+    border-radius: 24px;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+  }
+
+  .about-text .section-title { margin-bottom: 1rem; }
+  .about-text p { font-size: 0.95rem; color: var(--muted); line-height: 1.8; margin-bottom: 1rem; }
+
+  /* CONTACT */
+  .contact-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .contact-info { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 2rem; }
+
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.95rem;
+    color: var(--ink);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .contact-item:hover { color: var(--green); }
+
+  .contact-icon {
+    width: 42px;
+    height: 42px;
+    background: var(--green-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--green);
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  form { display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem; }
+
+  form input, form textarea, form select {
+    width: 100%;
+    padding: 0.85rem 1.1rem;
+    border: 1.5px solid rgba(0,0,0,0.1);
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    background: var(--white);
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s;
+    appearance: none;
+  }
+
+  form input:focus, form textarea:focus, form select:focus { border-color: var(--green); }
+  form textarea { resize: vertical; min-height: 110px; }
+
+  form button {
+    background: var(--green);
+    color: var(--white);
+    border: none;
+    padding: 0.9rem 2rem;
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    align-self: flex-start;
+  }
+
+  form button:hover { background: #1f4f3a; transform: translateY(-1px); }
+
+  .form-success {
+    display: none;
+    background: var(--green-light);
+    color: var(--green);
+    padding: 1rem 1.25rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.85rem;
+  }
+
+  footer span { color: rgba(255,255,255,0.8); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.4; transform: scaleY(1); }
+    50% { opacity: 0.8; transform: scaleY(1.2); }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 640px) {
+    nav { padding: 1rem 1.25rem; }
+    .nav-links { display: none; }
+    .about-inner, .contact-inner { grid-template-columns: 1fr; gap: 2rem; }
+    .about-visual { display: none; }
+    section { padding: 3.5rem 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">Spray Away</a>
+  <ul class="nav-links">
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact" class="nav-cta">Book now</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-circle a"></div>
+  <div class="hero-bg-circle b"></div>
+  <span class="hero-tag">Serving your neighborhood this summer</span>
+  <h1>Your bins deserve a <em>good clean.</em></h1>
+  <p class="hero-sub">Professional power washing and deodorizing for your trash and recycling bins — done fast, right at your curb.</p>
+  <div class="hero-btns">
+    <a href="#contact" class="btn-primary">Book a clean</a>
+    <a href="#how" class="btn-secondary">See how it works</a>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    scroll
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="container">
+    <span class="section-tag">The process</span>
+    <h2 class="section-title">Simple, fast, and done right.</h2>
+    <p class="section-sub">No subscriptions, no hassle. Just text Jonathan, leave your bins out, and come back to clean cans.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Text or DM to book</h3>
+        <p>Reach out with your address and which bins you want cleaned. Jonathan will confirm a day that works.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Leave your bins out</h3>
+        <p>No need to be home. Just make sure your bins are accessible on the agreed day.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Power wash + deodorize</h3>
+        <p>Every bin gets a full pressure wash and deodorizer treatment — inside and out.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h3>Pay after, not before</h3>
+        <p>Venmo, Zelle, or cash — whatever works for you. No payment needed until the job is done.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="container">
+    <span class="section-tag">Pricing</span>
+    <h2 class="section-title">Straightforward prices. No surprises.</h2>
+    <p class="section-sub">Deodorizer is included with every single clean, no matter what.</p>
+    <div class="pricing-cards">
+      <div class="pricing-card">
+        <p class="price-label">Single bin</p>
+        <p class="price-amt">$15</p>
+        <p class="price-desc">One trash or recycling bin</p>
+        <ul class="price-includes">
+          <li>Full pressure wash</li>
+          <li>Deodorizer included</li>
+          <li>Inside and out</li>
+        </ul>
+      </div>
+      <div class="pricing-card featured">
+        <p class="price-label">Both bins</p>
+        <p class="price-amt">$25</p>
+        <p class="price-desc">Trash + recycling together</p>
+        <ul class="price-includes">
+          <li>Full pressure wash on both</li>
+          <li>Deodorizer on both</li>
+          <li>Best value</li>
+        </ul>
+      </div>
+    </div>
+    <div class="referral-box">
+      <div class="referral-icon">&#127881;</div>
+      <div>
+        <h3>Refer a neighbor, get a free clean</h3>
+        <p>If someone books because of you, your next clean is completely free. No catch.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="about-inner">
+      <div class="about-visual">&#128166;</div>
+      <div class="about-text">
+        <span class="section-tag">About</span>
+        <h2 class="section-title">Hey, I'm Jonathan.</h2>
+        <p>I'm a Michigan State student home for the summer and I started Spray Away to offer something genuinely useful to my neighborhood — clean, fresh-smelling bins without anyone having to lift a finger.</p>
+        <p>Every clean gets a full pressure wash and deodorizer treatment. I take pride in doing it right and keeping it simple. No subscriptions, no upsells — just a clean bin and an easy experience.</p>
+        <a href="#contact" class="btn-primary" style="display:inline-block; margin-top:1rem;">Get in touch</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-inner">
+      <div>
+        <span class="section-tag">Contact</span>
+        <h2 class="section-title">Ready to book?</h2>
+        <p class="section-sub">Text, DM, or fill out the form — whatever is easiest for you.</p>
+        <div class="contact-info">
+          <a href="tel:2246558994" class="contact-item">
+            <div class="contact-icon">&#128222;</div>
+            (224) 655-8994
+          </a>
+          <a href="https://instagram.com/spray.away.cleaning" class="contact-item" target="_blank">
+            <div class="contact-icon">&#128247;</div>
+            @spray.away.cleaning
+          </a>
+        </div>
+      </div>
+      <div>
+        <form onsubmit="handleSubmit(event)">
+          <input type="text" placeholder="Your name" required>
+          <input type="text" placeholder="Your address" required>
+          <select required>
+            <option value="" disabled selected>Which bins?</option>
+            <option>1 bin — $15</option>
+            <option>Both bins — $25</option>
+          </select>
+          <textarea placeholder="Anything else I should know? (optional)"></textarea>
+          <button type="submit">Send booking request</button>
+        </form>
+        <div class="form-success" id="success-msg">
+          Thanks! Jonathan will be in touch shortly to confirm your booking.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 2025 <span>Spray Away</span> — Made with care in the neighborhood.</p>
+</footer>
+
+<script>
+function handleSubmit(e) {
+  e.preventDefault();
+  e.target.style.display = 'none';
+  document.getElementById('success-msg').style.display = 'block';
+}
+</script>
+
+</body>
+</html>
